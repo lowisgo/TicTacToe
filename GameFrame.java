@@ -1,8 +1,4 @@
-/* Author: 		Abasolo, John Jourish DC.
- * Section: 	U-6L
- * Exer #1: 	UI for Lights Out Game
- * Filename: 	surname_exer1.zip
- */
+package tictactoe;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -23,13 +19,13 @@ public class GameFrame extends JFrame implements GameSettings{
 
 	public static boolean turnFirst;
 
-	private final static String WINDOW_NAME = "Lights Out";
+	private final static String WINDOW_NAME = "TicTacToe";
 
 	private final static int WINDOW_SIZE_X = 500;
 	private final static int WINDOW_SIZE_Y = 500;
 
-	public GameFrame(int[][] contents){
-		this.contents = contents;
+	public GameFrame(){
+		this.contents = new int[GameSettings.BOARD_SIZE_X][GameSettings.BOARD_SIZE_Y];
 		this.turnFirst = true;
 		this.lightsOutFrame = new JFrame(GameFrame.WINDOW_NAME);
 
@@ -68,10 +64,6 @@ public class GameFrame extends JFrame implements GameSettings{
 			}
 			this.lightsOutContainer.add(this.rows[i]);
 		}	
-	}
-
-	public void access(){
-		System.out.println("Okay");
 	}
 
 	private void packFrame(){

@@ -1,8 +1,4 @@
-/* Author: 		Abasolo, John Jourish DC.
- * Section: 	U-6L
- * Exer #1: 	UI for Lights Out Game
- * Filename: 	surname_exer1.zip
- */
+package tictactoe;
 
 import java.io.BufferedReader; 
 import java.io.FileReader; 
