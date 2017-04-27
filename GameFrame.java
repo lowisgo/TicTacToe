@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class GameFrame extends JFrame implements GameSettings{
-	private int[][] contents;
+	private State contents;
 
 	private JFrame lightsOutFrame;
 	private Container lightsOutContainer;
@@ -24,8 +24,8 @@ public class GameFrame extends JFrame implements GameSettings{
 	private final static int WINDOW_SIZE_X = 500;
 	private final static int WINDOW_SIZE_Y = 500;
 
-	public GameFrame(){
-		this.contents = new int[GameSettings.BOARD_SIZE_X][GameSettings.BOARD_SIZE_Y];
+	public GameFrame(State contents){
+		this.contents = contents;
 		this.turnFirst = true;
 		this.lightsOutFrame = new JFrame(GameFrame.WINDOW_NAME);
 
