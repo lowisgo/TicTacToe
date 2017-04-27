@@ -1,3 +1,3 @@
 make:
-javac -d . *.java
-java tictactoe.TicTacToe
+	javac -d . *.java
+	java tictactoe.TicTacToe
