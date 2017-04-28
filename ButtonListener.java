@@ -199,6 +199,7 @@ public class ButtonListener implements MouseListener, GameSettings{
 			changeColor(this.btngrid[this.row][this.col], Color.BLUE);
 		}
 		else{
+			//after evaluation/mapalitan yung kulay/mag first turn deretso evaluate ng minmax sa loob neto then change color
 			changeColor(this.btngrid[this.row][this.col], Color.RED);
 		}
 
@@ -230,6 +231,8 @@ public class ButtonListener implements MouseListener, GameSettings{
 			);
 		}
 
+
+		//  turn ni AI
 		this.saveState();
 		this.printState();
 	}
