@@ -39,6 +39,66 @@ public class Solver implements GameSettings{
 		return toBeReturned;
 	}
 
+	// ----------------lois ito----------------
+	public int maxValue(State currentState){
+		int m = 1000000, v = 0;
+		ArrayList<Point> coordinates = new ArrayList<Point>();
+		State state = new State();
+
+		coordinates = action(currentState);
+
+		for(int i = 0; i < coordinates.size(); i++){
+			for(Point point : coordinates.get(i)){
+				state = result(currentState, point);
+				v = value(state);
+				m = max(m,v);	
+			}
+			return m;
+		}
+
+
+		//traverse through the arraylist 
+/*		while(coordinates.size() != 0){
+			removed = coordinates.remove();
+
+			//for a, s’ in successors(s)
+			state = result(currentState, removed);
+			v = value(state);
+			m = max(m,v);
+		}
+*/
+	}
+
+	public int minValue(State currentState){
+		int m = -1000000, v = 0;
+		ArrayList<Point> coordinates = new ArrayList<Point>();
+		Point removed;
+		State state = new State();
+
+		coordinates = action(currentState);
+
+		for(int i = 0; i < coordinates.size(); i++){
+			for(Point point : coordinates.get(i)){
+				state = result(currentState, point);
+				v = value(state);
+				m = max(m,v);	
+			}
+			return m;
+		}
+
+/*		//traverse through the arraylist 
+		while(coordinates.size() != 0){
+			removed = coordinates.remove();
+
+			//for a, s’ in successors(s)
+			state = result(currentState, removed);
+			v = value(state);
+			m = min(m,v);
+		}*/
+		
+	}
+	// ----------------lois ito----------------
+
 	public State result(State currentState, Point coordinates){
 		State nextState = new State();
 
