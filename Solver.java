@@ -124,121 +124,78 @@ public class Solver implements GameSettings{
 	}
 
 	public int value(State currentState){
-		int winner = 0;
-		if(horizontalWin(currentState)) winner = horizontalWinValue(currentState);
-		if(verticalWin(currentState)) winner = verticalWinValue(currentState);
-		if(diagonalDownWin(currentState)) winner = diagonalDownWinValue(currentState);
-		if(diagonalUpWin(currentState)) winner = diagonalUpWinValue(currentState);
-		
-		if(winner == 2) return 1; // panalo si AI
-		return -1; // hinde
-	}
-
-	public int horizontalWinValue(State currentState){
-		int horizontalBlue = 0;
-		int horizontalRed = 0;
-
-		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
-			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
-				if(currentState.config[i][j] == 1) horizontalBlue++;
-				else if(currentState.config[i][j] == 2) horizontalRed++;
-				if(horizontalRed == 3 || horizontalBlue == 3){
-					if(horizontalRed == 3) winner = 1;
-					else if(horizontalBlue == 3) winner = 2;
-				}
-			}			
-			horizontalBlue = 0;
-			horizontalRed = 0;
+		if(checkIfUtility(currentState)){
+			return utility(currentState);
 		}
-		return winner;
-	}
-
-	public int verticalWinValue(State currentState){
-		int verticalBlue = 0;
-		int verticalRed = 0;
-
-		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
-			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
-				if(currentState.config[j][i] == 1) verticalBlue++;
-				else if(currentState.config[j][i] == 2) verticalRed++;
-
-				if(verticalRed == 3 || verticalBlue == 3){
-					if(verticalRed == 3) winner = 1;
-					else if(verticalBlue == 3) winner = 2;
-				}
-			}			
-			verticalBlue = 0;
-			verticalRed = 0;
+		if(currentState.minmax == 1){
+			return maxValue(currentState);
 		}
-		return winner;
-	}
-
-	public int diagonalDownWinValue(State currentState){	
-		int diagonalDownBlue = 0;
-		int diagonalDownRed = 0;
-
-		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
-			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
-				if(i == j){
-					if(currentState.config[i][i] == 1) diagonalDownBlue++;
-					else if(currentState.config[i][i] == 2) diagonalDownRed++;
-
-					if(diagonalDownRed == 3 || diagonalDownBlue == 3){
-						if(diagonalDownRed == 3) winner = 1;
-						else if(diagonalDownBlue == 3) winner = 2;
-					}
-				}
-
-			}			
+		if(currentState.minmax == 2){
+			return minValue(currentState);
 		}
-
-		return winner;
+		return -10000000;
 	}
 
-	public int diagonalUpWinValue(State currentState){	
-		int diagonalUpRed = 0;
-		int diagonalUpBlue = 0;
+	public int maxValue(State currentState){
+		int m = 1000000, v = 0;
+		ArrayList<Point> coordinates = new ArrayList<Point>();
+		State state = new State(2); // kasi iba na yung type nung anak niya
 
-		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
-			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
-				if((i + j == 2) || (Math.abs(i - j) == 2)){
-					System.out.println(i+"asdf"+j);
-					if(currentState.config[i][j] == 1) diagonalUpBlue++;
-					else if(currentState.config[i][j] == 2) diagonalUpRed++;
-
-					if(diagonalUpRed == 3 || diagonalUpBlue == 3){
-						if(diagonalUpRed == 3) winner = 1;
-						else if(diagonalUpBlue == 3) winner = 2;
-					}
-				}
-			}			
-		}
-		return winner;
-	}
-
-
-	public State utility(State currentState){
-		State nextState = new State();
-
-		// copying int[][] config of the current state to the next state
-		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
-			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
-				nextState.config[i][j] = currentState.config[i][j];
+		coordinates = action(currentState);
+		for(int i = 0; i < coordinates.size(); i++){
+			for(Point point : coordinates){
+				state = result(currentState, point);
+				state.parent = currentState;
+				v = value(state);
+				m = max(m,v);	
 			}
 		}
+		return m;
+	}
 
-		// copying int[][] toggled of the current state to the next state
-		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
-			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
-				nextState.toggled[i][j] = currentState.toggled[i][j];
+	public int minValue(State currentState){
+		int m = -1000000, v = 0;
+		ArrayList<Point> coordinates = new ArrayList<Point>();
+		State state = new State(1); // kasi iba na yung type nung anak niya
+
+		coordinates = action(currentState);
+		for(int i = 0; i < coordinates.size(); i++){
+			for(Point point : coordinates){
+				state = result(currentState, point);
+				state.parent = currentState;
+				v = value(state);
+				m = max(m,v);
 			}
 		}
+		return m;
+	}
 
+	public void minMaxAlgo(int[][] config){
+		// laging min yung una kay AI
+		State state = new State(config); // root sa tree
+		int value = minValue(state);
+		// anung gagawin dun sa m?
+		// paano idedetect na siya yung best move
+		if()		
+	}
+
+	public boolean checkIfUtility(State currentState){		
 		if(horizontalWin(currentState) || verticalWin(currentState) || diagonalUpWin(currentState) || diagonalDownWin(currentState) || drawCheck(currentState)){
-			return nextState;
+			return true;
 		}
+		return false;
+	}
 
-		return null;	
+	public int utility(State currentState){
+		if(GameFrame.turnFirst == false){ // false == 2nd player == AI
+			if(horizontalWin(currentState) || verticalWin(currentState) || diagonalUpWin(currentState) || diagonalDownWin(currentState)){
+				return 1; // win
+			}
+			else if(drawCheck(currentState)){
+				return 0; // draw
+			}
+		}
+		return -1; // lose
 	}
 
 	public boolean horizontalWin(State currentState){
