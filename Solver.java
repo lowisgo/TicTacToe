@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 public class Solver implements GameSettings{
 	public int winner;
+	private int m;
 
 	// returns max value among two int
 	public int max(int a, int b){
@@ -38,66 +39,6 @@ public class Solver implements GameSettings{
 
 		return toBeReturned;
 	}
-
-	// ----------------lois ito----------------
-	public int maxValue(State currentState){
-		int m = 1000000, v = 0;
-		ArrayList<Point> coordinates = new ArrayList<Point>();
-		State state = new State();
-
-		coordinates = action(currentState);
-
-		for(int i = 0; i < coordinates.size(); i++){
-			for(Point point : coordinates.get(i)){
-				state = result(currentState, point);
-				v = value(state);
-				m = max(m,v);	
-			}
-			return m;
-		}
-
-
-		//traverse through the arraylist 
-/*		while(coordinates.size() != 0){
-			removed = coordinates.remove();
-
-			//for a, s’ in successors(s)
-			state = result(currentState, removed);
-			v = value(state);
-			m = max(m,v);
-		}
-*/
-	}
-
-	public int minValue(State currentState){
-		int m = -1000000, v = 0;
-		ArrayList<Point> coordinates = new ArrayList<Point>();
-		Point removed;
-		State state = new State();
-
-		coordinates = action(currentState);
-
-		for(int i = 0; i < coordinates.size(); i++){
-			for(Point point : coordinates.get(i)){
-				state = result(currentState, point);
-				v = value(state);
-				m = max(m,v);	
-			}
-			return m;
-		}
-
-/*		//traverse through the arraylist 
-		while(coordinates.size() != 0){
-			removed = coordinates.remove();
-
-			//for a, s’ in successors(s)
-			state = result(currentState, removed);
-			v = value(state);
-			m = min(m,v);
-		}*/
-		
-	}
-	// ----------------lois ito----------------
 
 	public State result(State currentState, Point coordinates){
 		State nextState = new State();
@@ -164,7 +105,7 @@ public class Solver implements GameSettings{
 				state = result(currentState, point);
 				state.parent = currentState;
 				v = value(state);
-				m = max(m,v);
+				m = min(m,v);
 			}
 		}
 		return m;
@@ -175,9 +116,39 @@ public class Solver implements GameSettings{
 		State state = new State(config); // root sa tree
 		int value = minValue(state);
 		// anung gagawin dun sa m?
-		// paano idedetect na siya yung best move
-		if()		
+		// paano idedetect na siya yung best move		
 	}
+
+	//updated starts here----------------------------------------------
+	//finds the bestnode
+	public State getBestNode(State state, int value){
+		if(value == state.child.m){
+			return state.parent;
+		}
+		return null;
+	}
+	
+	//gets the coordinates to change (bestnode vs oldnode)
+	public Point compareBestNode(State state){
+		State bestchild = getBestNode(state);
+
+		for(int i = 0; i < 3; i++){
+			for(j = 0; j < 3; j++){
+				if(state.config[i][j] != bestchild.config[i][j]){
+					Point point = new Point(i, j);
+				}
+			}
+		}
+		return point;
+	}
+
+	//if magkakaparehas ng output, check alin yung kukunin
+	public void checkNode(State currentState){
+		if(currentState.child.m == currentState.parent.m){
+			//ignore lang
+		}
+	}
+	//update ends here----------------------------------------------------------
 
 	public boolean checkIfUtility(State currentState){		
 		if(horizontalWin(currentState) || verticalWin(currentState) || diagonalUpWin(currentState) || diagonalDownWin(currentState) || drawCheck(currentState)){
@@ -308,4 +279,5 @@ public class Solver implements GameSettings{
 		}
 		return true;
 	}
+
 }
