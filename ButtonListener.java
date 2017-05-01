@@ -232,10 +232,19 @@ public class ButtonListener implements MouseListener, GameSettings{
 		}
 
 
-		//  turn ni AI
+		//turn ni AI-------
+		this.turnAI();
 		this.saveState();
 		this.printState();
+		//-----------------
 	}
+
+	//udated starts here-----------------------------------------------
+	public void turnAI(){
+		/*insert code to change color as turn of AI*/
+		changeColor(this.btngrid[point.getX()][point.getY()],Color.BLUE);
+	}
+	//-----------------------------------------------------------------
 
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
