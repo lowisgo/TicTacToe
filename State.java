@@ -4,8 +4,8 @@ public class State{
 	public int[][] config;
 	public int[][] toggled;
 	public int minmax;
-	
 	public State parent;
+	public State child;
 
 	// initial creation
 	public State(){
