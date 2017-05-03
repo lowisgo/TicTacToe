@@ -57,6 +57,17 @@ public class GameFrame extends JFrame implements GameSettings{
 			for(int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
 				this.buttons2D[i][j] = new JButton();
 				this.buttons2D[i][j].setBackground(Color.WHITE);
+
+				if(contents.config[i][j] == 0){
+					this.buttons2D[i][j].setBackground(Color.WHITE);
+				}
+				if(contents.config[i][j] == 2){
+					this.buttons2D[i][j].setBackground(Color.RED);
+				}
+				if(contents.config[i][j] == 1){
+					this.buttons2D[i][j].setBackground(Color.BLUE);
+				}
+
 				this.rows[i].add(this.buttons2D[i][j]);
 
 				// add a button listener to change the buttons' color

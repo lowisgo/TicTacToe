@@ -1,6 +1,7 @@
 package tictactoe;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -105,7 +106,6 @@ public class ButtonListener implements MouseListener, GameSettings{
 						return false;
 					}
 				}
-
 			}			
 		}
 
@@ -119,7 +119,6 @@ public class ButtonListener implements MouseListener, GameSettings{
 		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
 			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
 				if((i + j == 2) || (Math.abs(i - j) == 2)){
-					System.out.println(i+"asdf"+j);
 					if(this.btngrid[i][j].getBackground() == Color.BLUE){
 						diagonalUpBlue++;
 					}
@@ -191,18 +190,16 @@ public class ButtonListener implements MouseListener, GameSettings{
 		return this.finalGrid;
 	}
 
-	public void mouseClicked(MouseEvent e){
-		// button clicked
-		System.out.println(GameFrame.turnFirst + "asdf");
-
-		if(GameFrame.turnFirst){
-			changeColor(this.btngrid[this.row][this.col], Color.BLUE);
+	public void printStateNumber(int [][] grid){
+		for (int i = 0; i < GameSettings.BOARD_SIZE_X; i++) {
+			for (int j = 0; j < GameSettings.BOARD_SIZE_Y; j++) {
+				System.out.print(grid[i][j] + " ");
+			}	
+			System.out.println();
 		}
-		else{
-			//after evaluation/mapalitan yung kulay/mag first turn deretso evaluate ng minmax sa loob neto then change color
-			changeColor(this.btngrid[this.row][this.col], Color.RED);
-		}
+	}
 
+	public void popUpMessage(){
 		if(!this.horizontalWin() || !this.verticalWin() || !this.diagonalDownWin() || !this.diagonalUpWin()){
 			if(winner == 1){
 				JOptionPane.showMessageDialog(
@@ -211,6 +208,7 @@ public class ButtonListener implements MouseListener, GameSettings{
 					"Game Over",
 					JOptionPane.PLAIN_MESSAGE
 				);
+				System.exit(0);
 			}
 			else if(winner == 2){
 				JOptionPane.showMessageDialog(
@@ -219,6 +217,7 @@ public class ButtonListener implements MouseListener, GameSettings{
 					"Game Over",
 					JOptionPane.PLAIN_MESSAGE
 				);
+				System.exit(0);
 			}
 		}
 
@@ -229,22 +228,30 @@ public class ButtonListener implements MouseListener, GameSettings{
 				"Game Over",
 				JOptionPane.PLAIN_MESSAGE
 			);
-		}
+			System.exit(0);
+		}		
+	}
 
+	public void mouseClicked(MouseEvent e){
+		// turn ni player
+		changeColor(this.btngrid[this.row][this.col], Color.BLUE);
+		this.popUpMessage();
 
-		//turn ni AI-------
-		this.turnAI();
+		// pagupdate nung board
 		this.saveState();
 		this.printState();
-		//-----------------
+
+		// turn ni AI
+		this.turnAI();
+		this.popUpMessage();
 	}
 
-	//udated starts here-----------------------------------------------
 	public void turnAI(){
-		/*insert code to change color as turn of AI*/
-		changeColor(this.btngrid[point.getX()][point.getY()],Color.BLUE);
+		Solver solve = new Solver();
+		printStateNumber(this.finalGrid);
+		Point point = solve.minMaxAlgo(this.finalGrid);
+		changeColor(this.btngrid[(int)point.getX()][(int)point.getY()], Color.RED);
 	}
-	//-----------------------------------------------------------------
 
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
